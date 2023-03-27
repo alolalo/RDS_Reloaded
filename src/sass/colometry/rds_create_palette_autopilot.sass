@@ -1,0 +1,111 @@
+// This is an experimental but functional way of user-defined color-scales using the numeric version of BOUM to create infinitely large color pools & palettes to use as design tokens. For most cases the normal create_palette functions are advised as you can dial down how to control each individual color generated. However, in the auto-pilot version you do not have such granular detail. But... as a compensation you have full boolean control if color-contrast checking is done per color-pool! It's a more systemic approach to parametric design system engineering at scale.
+// Import colors
+@import "rds_base_colors";
+@import "rds_color_contrast";
+
+// Define color pools
+$pool-size-base: 9;
+$pool-size-system: 5;
+$pool-size-utility: 3;
+
+// Define amount of colors to be generated, Intensity and Saturation Adjustments
+$light-p: 10%;
+$dark-p: 10%;
+$saturation-p: 20%;
+
+$lighten-amount: $light-p;
+$lighter: $lighten-amount;
+$llighter: $lighten-amount * 2.12;
+$lllighter: $lighten-amount * 3.74;
+$maxlighter: $lighten-amount * 4.78;
+
+$darken-amount: $dark-p;
+$ddark: $darken-amount;
+$dddark: $darken-amount * 2.12;
+$dddarker: $darken-amount * 3.74;
+$maxdarker: $lighten-amount * 4.78;
+
+$saturate-amount: $saturation-p;
+$saturater: $saturate-amount;
+$ssaturater: $saturate-amount * 2.12;
+$sssaturater: $saturate-amount * 3.74;
+$maxsaturater: $saturate-amount * 4.78;
+
+$text-contrast-requirement: map-get($contrast-requirements, 'text');
+
+// Define base color pairs
+$color-map-base: (
+  c0: $cc,
+  c5: $cg,
+  c1: $cm,
+  c4: $cy
+);
+
+// Define system colors
+$color-map-system: (
+  s1: $scw,
+  s2: $scg,
+  s3: $scb
+);
+
+// Define utility colors
+$color-map-utility: (
+  u1: $ucw,
+  u2: $ucs,
+  u3: $uce,
+  u4: $ucn
+);
+
+// Generate color pools
+@mixin generate-color-pool($pool-size, $value, $light: $light-p, $dark: $dark-p, $saturate: $saturation-p, $apply-contrast: true) {
+  $increment: 0;
+  $half-pool-size: ($pool-size - 1) / 2;
+
+  @for $i from 1 through $pool-size {
+    $suffix: '';
+    $variant: $i - $increment;
+
+    // If variant equals negative half of the pool size
+    @if $variant == -$half-pool-size {
+      $variant: 'mub'; // Set variant to mub for negative values at beginning of pool
+    }
+    // If variant equals half of the pool size
+    @else if $variant == $half-pool-size {
+      $variant: 'mob'; // Set variant to mob for positive values at end of pool
+      $increment: $i - 1; // Update increment to current index minus 1
+    }
+    // If increment is greater than 0, set suffix and variant for ob variants
+    @else if $increment > 0 {
+      $suffix: "--ob#{($variant - 1) % 4 + 1}"; // Set suffix with ob and number between 1 and 4
+      $variant: ($variant - 1) % 4 + 1; // Set variant to number between 1 and 4
+    }
+
+    // Adjust color for each variant using the adjust-color function and suffix, if applicable
+    $color: adjust-color(#{$value}, $light, $dark, ($saturate * $variant / $half-pool-size))#{suffix};
+    @if $apply-contrast {
+      $color: color-contrast-adjustment($color, $text-contrast-requirement, '')#{suffix};
+    }
+    --#{$value}-#{$variant}: $color;
+  }
+}
+
+// Iterate over the combined color pools
+@each $color, $value in map-merge(map-merge($color-map-base, $color-map-system), $color-map-utility) {
+  // Only generate color pools from the combined color maps
+  @if (str-slice($value, 0, 1) == 'c' or str-slice($value, 0, 1) == 's' or str-slice($value, 0, 1) == 'u') {
+    --#{$color}: #{$value};
+    @include generate-color-pool($pool-size-base, "c#{$color}", $light, $dark, $saturation-p, true);
+  }
+}
+
+// Generate text variants
+@each $color-pool in ('c', 's', 'u') {
+  // Combine the color pools from the combined color maps
+  $pool-size: if($color-pool == 'c', $pool-size-base, $pool-size-system);
+  --#{$color-pool}--text: var(--#{$color-pool}0);
+
+  // Iterate over the combined color pools for each pool size
+  @for $i from 1 through $pool-size {
+    --#{$color-pool}#{$i}--text: var(--#{$color-pool}#{$i});
+  }
+}

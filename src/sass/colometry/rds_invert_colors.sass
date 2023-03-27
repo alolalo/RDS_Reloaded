@@ -1,0 +1,49 @@
+// This function simply inverts all your excisting design tokens, inverts them and then suffixes '__i' to each of them. This means in practice that whenever you are using a color, and simply need a high-contrast composite color, you can just use the same variable and just add __i to the token-name to get exactly that: Inversion
+
+// Utility function to convert between color formats. Please note that lch color functions do not excist natively this time of writing, or at least that I know of. Otherwise I would have updated this comment already ;)
+
+// Import original color map
+@import "rds_lock";
+
+@function convert-color($color, $format) {
+  @if $format == "srgb" {
+    @return unquote("srgb(" + join($color, ", ") + ")");
+  } @else if $format == "hsl" {
+    @return unquote("hsl(" + join($color, ", ") + ")");
+  } @else if $format == "lch" {
+    @return unquote("lch(" + join($color, ", ") + ")");
+  } @else if $format == "oklch" {
+    @return unquote("oklch(" + join($color, ", ") + ")");
+  } @else if $format == "hsla" {
+    $alpha: nth($color, 4);
+    @return unquote("hsla(" + join(nth($color, 1, 3), ", ") + ", #{$alpha})");
+  } @else {
+    @return $color;
+  }
+}
+
+// Utility function to calculate inverted color
+@function invert-color($color, $format: null) {
+  $inverted: ();
+
+  @if type-of($color) == "color" {
+    $components: red($color), green($color), blue($color);
+    @each $component in $components {
+      $inverted: append($inverted, 255 - $component);
+    }
+
+    // Calling the color-contrast-adjustment function on the inverted color
+    $inverted-color: color-contrast-adjustment(rgb($inverted...), 'aa'); // Adjust the contrast requirement as necessary
+    @return if($format, convert-color($inverted-color, $format), $inverted-color);
+  } @else {
+    @return $color;
+  }
+}
+// Generate inverted color map
+$colors-i: ();
+
+@each $color, $value in $colors {
+  $color-i: $color + "__i";
+  $color-value: invert-color($value, type-of($value));
+  $colors-i: map-merge($colors-i, ($color-i: $color-value));
+}

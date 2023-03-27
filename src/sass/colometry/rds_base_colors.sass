@@ -1,0 +1,28 @@
+// Sets and Symmetry are a revolving thing in RevolverDS. Below is a Base Color Palette used to create complementary color sets, each color having 6 variants in total (3 lighter/3 darker). This is done later on, but in this file you declare the INPUT for these Sass functions so they generate the OUTPUT you want.
+
+// RevolverDS uses two pairs of complementary colors, the System and Utility colors use a triadic approach to create a very healthy color palette that is WCAG 2.0 + Custom Contrast Ratio compliant. Open rds_color_contrast to set the paramaters for A, AA, AAA and TEXT contrast values which the Sass function uses to process all colors it consumes. No third-party, YOU party! 
+
+// These colors are passed to rds_create_palette (numeric or roman) that will generate BOUM-tokens that are locked, loaded and ready to ship. Also, if you want to change the NAMING OF COLOR VARIABLES of the ENTIRE SYSTEM, this is the place to do so as everything here-after inherits the naming. 
+
+// QUICK TIP: just comment out (//) the colors you don't want processed anymore when serving Sass to (re)build your tokens. This can come in handy when you're dialing in the saturation of one color, but don't want to overwrite your already aproved colors.
+$colors (
+// Define Base color-pairs (Complimentary) Magenta & Green, Cyan & Yellow
+$cc: #22cafe;
+$cm: #fa22ce;
+$cy: #face22;
+$cg: #22face;
+
+// Define System colors (Triadic) White, Grey and Black
+$scw: #f0fdff;
+$scg: #8B8C89;
+$scb: #010a11;
+
+// Define Utility colors (Triadic) Warning Succes Error & Notification
+$ucw: #ea1265;
+$ucs: #00F0A2;
+$uce: #9B4EFF;
+$ucn: #ff9d1d;
+)
+:root {
+
+}

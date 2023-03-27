@@ -1,0 +1,99 @@
+// This process creates BOUM-tokens with Roman Numerics, meaning letters only to count up and down
+@import "rds_base_colors";
+@import "rds_color_contrast";
+
+// Define Intensity and Saturation Adjustments
+$light-p: 10%;
+$dark-p: 10%;
+$saturation-p: 20%;
+
+// Define variables for lightening, darkening, and saturating colors, expand when needed
+$lighten-amount: $light-p;
+$lighter: $lighten-amount;
+$llighter: $lighten-amount * 2.12;
+$lllighter: $lighten-amount * 3.74;
+$maxlighter: $lighten-amount * 4.78;
+
+$darken-amount: $dark-p;
+$ddark: $darken-amount;
+$dddark: $darken-amount * 2.12;
+$dddarker: $darken-amount * 3.74;
+$maxdarker: $lighten-amount * 4.78;
+
+$saturate-amount: $saturation-p;
+$saturater: $saturate-amount;
+$ssaturater: $saturate-amount * 2.12;
+$sssaturater: $saturate-amount * 3.74;
+$maxsaturater: $saturate-amount * 4.78;
+
+// Set the variable for the color contrast requirement for the text variant already set up in rds_color_contrast, and can be adjusted to meet your needs inside there.
+$text-contrast-requirement: map-get($contrast-requirements, 'text');
+
+// The entire systematical logic of RevolverDS happens because of the BOUM naming convention, which is a human-computer friendly pattern to generate things on a ramp at scale. Need more colors for your palette? Simply copy the logic and create the new variables using the same naming-pattern you already see. 
+:root {
+  @each $color, $value in $color-map {
+    --#{$color}-b: #{$value};
+    --#{$color}-mob: color-contrast-adjustment(saturate(lighten(#{$value}, $maxlighter), $maxsaturater);
+    --#{$color}-ooob: color-contrast-adjustment(saturate(lighten(#{$value}, $lllighter), $sssaturater);
+    --#{$color}-oob: color-contrast-adjustment(saturate(lighten(#{$value}, $llighter), $ssaturater);
+    --#{$color}-ob: color-contrast-adjustment(saturate(lighten(#{$value}, $lighter), $saturater);
+    --#{$color}-ub: color-contrast-adjustment(saturate(darken(#{$value}, $ddark), $saturater);
+    --#{$color}-uub: color-contrast-adjustment(saturate(darken(#{$value}, $dddark), $ssaturater);
+    --#{$color}-uuub: color-contrast-adjustment(saturate(darken(#{$value}, $dddarker), $sssaturater);
+    --#{$color}-mub: color-contrast-adjustment(saturate(darken(#{$value}, $maxdarker), $maxsaturater);
+    // Add the Text variant using color-contrast-adjustment function with the Base value as input
+    --#{$color}-text: color-contrast-adjustment(var(--#{$color}-base), $text-contrast-requirement, '');
+  }
+
+
+// The System colors palette is handled separately as these are not decorative but declarative colors. Again, if you want to change how the naming works of system colors; change the first three letters only, not the BOUM-token extensions for On and Under the Base value.
+
+// System Color White
+--scw: #{$scw};
+--scw-ob: lighten(#{$scw}, $lighter);
+--scw-mob: lighten(#{$scw}, $llighter);
+--scw-ub: darken(#{$scw}, $ddark);
+--scw-mub: darken(#{$scw}, $dddark);
+--scw-text: color-contrast-adjustment(var(--scw), $text-contrast-requirement, '');
+// System Color Grey
+--scg: #{$scg};
+--scg-ob: lighten(#{$scg}, $lighter);
+--scg-mob: lighten(#{$scg}, $llighter);
+--scg-ub: darken(#{$scg}, $ddark);
+--scg-mub: darken(#{$scg}, $dddark);
+--scg-text: color-contrast-adjustment(var(--scg), $text-contrast-requirement, '');
+// System Color Black
+--scb: #{$scb};
+--scb-ob: lighten(#{$scb}, $lighter);
+--scb-mob: lighten(#{$scb}, $llighter);
+--scb-ub: darken(#{$scb}, $ddark);
+--scb-mub: darken(#{$scb}, $dddark);
+--scb-text: color-contrast-adjustment(var(--scb), $text-contrast-requirement, '');
+// System Color Warning
+--ucw: #{$ucw};
+--ucw-ob: lighten(#{$ucw}, $lighter);
+--ucw-mob: lighten(#{$ucw}, $llighter);
+--ucw-ub: darken(#{$ucw}, $ddark);
+--ucw-mub: darken(#{$ucw}, $dddark);
+--ucw-text: color-contrast-adjustment(var(--ucw), $text-contrast-requirement, '');
+// Utility Color Succes
+--ucs: #{$ucs};
+--ucs-ob: lighten(#{$ucs}, $lighter);
+--ucs-mob: lighten(#{$ucs}, $llighter);
+--ucs-ub: darken(#{$ucs}, $ddark);
+--ucs-mub: darken(#{$ucs}, $dddark);
+--ucs-text: color-contrast-adjustment(var(--ucs), $text-contrast-requirement, '');
+// Utility Color Error
+--uce: #{$ucb};
+--uce-ob: lighten(#{$ucb}, $lighter);
+--uce-mob: lighten(#{$ucb}, $llighter);
+--uce-ub: darken(#{$ucb}, $ddark);
+--uce-mub: darken(#{$ucb}, $dddark);
+--uce-text: color-contrast-adjustment(var(--uce), $text-contrast-requirement, '');
+// Utility Color Notification
+--ucn: #{$ucn};
+--ucn-ob: lighten(#{$ucb}, $lighter);
+--ucn-mob: lighten(#{$ucb}, $llighter);
+--ucn-ub: darken(#{$ucb}, $ddark);
+--ucn-mub: darken(#{$ucb}, $dddark);
+--ucn-text: color-contrast-adjustment(var(--ucn), $text-contrast-requirement, '');

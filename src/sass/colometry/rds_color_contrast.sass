@@ -1,0 +1,41 @@
+// User-defined contrast requirements and color values
+$contrast-requirements: (
+  'a': 3,
+  'aa': 7,
+  'aaa': 11,
+  'text': 17
+);
+// User-defined background colors to test against
+$black: #000000;
+$white: #ffffff;
+
+// Amount to darken or lighten the color
+$color-darken-amount: 10%;
+$color-lighten-amount: 10%;
+
+// Utility function to calculate color contrast based on user-defined value
+@function color-contrast-adjustment($color, $contrast, $modifier: '') {
+  $required-contrast: '';
+
+  // Calculate required contrast based on user-defined value between color and user-defined contrast check color
+  $check-color: $contrast == 'aa' or $contrast == 'aaa' ? $white : $black;
+  $required-contrast: contrast-ratio($color, $check-color) >= $contrast-requirements.$contrast;
+
+  // If the required contrast is met, return the original color
+  @if ($required-contrast) {
+    @return $color;
+  } @else {
+    $modified-color: '';
+
+    // Apply the modifier (lighten or darken) to the color
+    @if ($modifier == 'lighten') {
+      $modified-color: lighten($color, $color-lighten-amount);
+    } @else {
+      $modified-color: darken($color, $color-darken-amount);
+    }
+
+    // Built-in TEST: Append the Modified suffix (_m) to a failed variable value and call the function again with the Modified color. This function is for debugging purposes so "the bug" now has a name; _m for modified. For stable production-ready code you should be able to discard this entire if statment safely.
+    $new-color: $modified-color + $modifier + '_m';
+    @return color-contrast-adjustment($new-color, $contrast, $modifier);
+  }
+}

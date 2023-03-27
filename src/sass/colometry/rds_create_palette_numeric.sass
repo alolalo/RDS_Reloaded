@@ -1,0 +1,100 @@
+// This process creates BOUM-tokens with Numerics, meaning numbers are declared at the end to count up or down
+@import "rds_base_colors";
+@import "rds_color_contrast";
+
+// Define Intensity and Saturation Adjustments
+$light-p: 10%;
+$dark-p: 10%;
+$saturation-p: 20%;
+
+// Define variables for lightening, darkening, and saturating colors, expand when needed
+$lighten-amount: $light-p;
+$lighter: $lighten-amount;
+$llighter: $lighten-amount * 2.12;
+$lllighter: $lighten-amount * 3.74;
+$maxlighter: $lighten-amount * 4.78;
+
+$darken-amount: $dark-p;
+$ddark: $darken-amount;
+$dddark: $darken-amount * 2.12;
+$dddarker: $darken-amount * 3.74;
+$maxdarker: $lighten-amount * 4.78;
+
+$saturate-amount: $saturation-p;
+$saturater: $saturate-amount;
+$ssaturater: $saturate-amount * 2.12;
+$sssaturater: $saturate-amount * 3.74;
+$maxsaturater: $saturate-amount * 4.78;
+
+// Set the variable for the color contrast requirement for the text variant already set up in rds_color_contrast, and can be adjusted to meet your needs inside there.
+$text-contrast-requirement: map-get($contrast-requirements, 'text');
+
+// The entire systematical logic of RevolverDS happens because of the BOUM naming convention, which is a human-computer friendly pattern to generate things on a ramp at scale. Need more colors for your palette? Simply copy the logic and create the new variables above using the same naming-pattern you already see. 
+:root {
+  @each $color, $value in $color-map {
+    --#{$color}-b: #{$value};
+    --#{$color}-mob: color-contrast-adjustment(saturate(lighten(#{$value}, $maxlighter), $maxsaturater);
+    --#{$color}-ob3: color-contrast-adjustment(saturate(lighten(#{$value}, $lllighter), $sssaturater);
+    --#{$color}-ob2: color-contrast-adjustment(saturate(lighten(#{$value}, $llighter), $ssaturater);
+    --#{$color}-ob1: color-contrast-adjustment(saturate(lighten(#{$value}, $lighter), $saturater);
+    --#{$color}-ub1: color-contrast-adjustment(saturate(darken(#{$value}, $ddark), $saturater);
+    --#{$color}-ub2: color-contrast-adjustment(saturate(darken(#{$value}, $dddark), $ssaturater);
+    --#{$color}-ub3: color-contrast-adjustment(saturate(darken(#{$value}, $dddarker), $sssaturater);
+    --#{$color}-mub: color-contrast-adjustment(saturate(darken(#{$value}, $maxdarker), $maxsaturater);
+    // Add the Text variant using color-contrast-adjustment function with the Base value as input
+    --#{$color}-text: color-contrast-adjustment(var(--#{$color}), $text-contrast-requirement, '');
+  }
+
+// The System colors palette is handled separately as these are not decorative but declarative colors. You could also delete this part hereafter and have all colors use the formula above for simplicity and code redundancy, but I prefer to have a more limited set of these specific colors that I dial in. 
+
+// QUICK TIP: just comment out the color variants you don't want processed anymore when serving Sass to (re)build your tokens. This can come in handy when you're dialing in the saturation of one color, but don't want to overwrite your already aproved colors.
+
+// System Color White
+--scw: #{$scw};
+--scw-ob1: color-contrast-adjustment(saturate(lighten(#{$scw}, $lighter), $saturater);
+--scw-mob: color-contrast-adjustment(saturate(lighten(#{$scw}, $maxlighter), $maxsaturater);
+--scw-ub1: color-contrast-adjustment(saturate(darken(#{$scw}, $ddark), $saturater);
+--scw-mub: color-contrast-adjustment(saturate(darken(#{$scw}, $maxdarker), $maxsaturater);
+--scw-text: color-contrast-adjustment(var(--scw), $text-contrast-requirement, '');
+// System Color Grey
+--scg: #{$scg};
+--scg-ob1: color-contrast-adjustment(saturate(lighten(#{$scg}, $lighter), $saturater);
+--scg-mob: color-contrast-adjustment(saturate(lighten(#{$scg}, $maxlighter), $maxsaturater);
+--scg-ub1: color-contrast-adjustment(saturate(darken(#{$scg}, $ddark), $saturater);
+--scg-mub: color-contrast-adjustment(saturate(darken(#{$scg}, $maxdarker), $maxsaturater);
+--scg-text: color-contrast-adjustment(var(--scg), $text-contrast-requirement, '');
+// System Color Black
+--scb: #{$scb};
+--scb-ob1: color-contrast-adjustment(saturate(lighten(#{$scb}, $lighter), $saturater);
+--scb-mob: color-contrast-adjustment(saturate(lighten(#{$scb}, $maxlighter), $maxsaturater);
+--scb-ub1: color-contrast-adjustment(saturate(darken(#{$scb}, $ddark), $saturater);
+--scb-mub: color-contrast-adjustment(saturate(darken(#{$scb}, $maxdarker), $maxsaturater);
+--scb-text: color-contrast-adjustment(var(--scb), $text-contrast-requirement, '');
+// System Color Warning
+--ucw: #{$ucw};
+--ucw-ob1: color-contrast-adjustment(saturate(lighten(#{$ucw}, $lighter), $saturater);
+--ucw-mob: color-contrast-adjustment(saturate(lighten(#{$ucw}, $maxlighter), $maxsaturater);
+--ucw-ub1: color-contrast-adjustment(saturate(darken(#{$ucw}, $ddark), $saturater);
+--ucw-mub: color-contrast-adjustment(saturate(darken(#{$ucw}, $maxdarker), $maxsaturater);
+--ucw-text: color-contrast-adjustment(var(--ucw), $text-contrast-requirement, '');
+// Utility Color Succes
+--ucs: #{$ucs};
+--ucs-ob1: color-contrast-adjustment(saturate(lighten(#{$ucs}, $lighter), $saturater);
+--ucs-mob: color-contrast-adjustment(saturate(lighten(#{$ucs}, $maxlighter), $maxsaturater);
+--ucs-ub1: color-contrast-adjustment(saturate(darken(#{$ucs}, $ddark), $saturater);
+--ucs-mub: color-contrast-adjustment(saturate(darken(#{$ucs}, $maxdarker), $maxsaturater);
+--ucs-text: color-contrast-adjustment(var(--ucs), $text-contrast-requirement, '');
+// Utility Color Error
+--uce: #{$ucb};
+--uce-ob1: color-contrast-adjustment(saturate(lighten(#{$uce}, $lighter), $saturater);
+--uce-mob: color-contrast-adjustment(saturate(lighten(#{$uce}, $maxlighter), $maxsaturater);
+--uce-ub1: color-contrast-adjustment(saturate(darken(#{$uce}, $ddark), $saturater);
+--uce-mub: color-contrast-adjustment(saturate(darken(#{$uce}, $maxdarker), $maxsaturater);
+--uce-text: color-contrast-adjustment(var(--uce), $text-contrast-requirement, '');
+// Utility Color Notification
+--ucn: #{$ucn};
+--ucn-ob1: color-contrast-adjustment(saturate(lighten(#{$ucn}, $lighter), $saturater);
+--ucn-mob: color-contrast-adjustment(saturate(lighten(#{$ucn}, $maxlighter), $maxsaturater);
+--ucn-ub1: color-contrast-adjustment(saturate(darken(#{$ucn}, $ddark), $saturater);
+--ucn-mub: color-contrast-adjustment(saturate(darken(#{$ucn}, $maxdarker), $maxsaturater);
+--ucn-text: color-contrast-adjustment(var(--ucn), $text-contrast-requirement, '');
