@@ -1,0 +1,48 @@
+$breakpoint-xsmall: 320px;
+$breakpoint-small: 576px;
+$breakpoint-medium: 768px;
+$breakpoint-large: 1024px;
+$breakpoint-extra-large: 1300px;
+
+@mixin min-width($breakpoint) {
+  @if ($breakpoint == uub) {
+    @media (min-width: $breakpoint-xsmall) {
+      @content;
+    }
+  } @else if ($breakpoint == ub) {
+    @media (min-width: $breakpoint-small) {
+      @content;
+    }
+  } @else if ($breakpoint == b) {
+    @media (min-width: $breakpoint-medium) {
+      @content;
+    }
+  } @else if ($breakpoint == ob) {
+    @media (min-width: $breakpoint-large) {
+      @content;
+    }
+  } @else if ($breakpoint == obb) {
+    @media (min-width: $breakpoint-extra-large) {
+      @content;
+    }
+  } @else {
+    @error "UNKNOWN MEDIA BREAKPOINT #{$breakpoint}";
+  }
+}
+
+/* How to Use:
+/*<style lang="scss">
+    @use './path/fluidity/breakpoints';
+
+    div {
+        @include media.min-width(ub) {
+            background: red;
+        }
+
+        @include media.min-width(ob) {
+            background: green;
+        }
+    }
+   </style>
+ */
+    

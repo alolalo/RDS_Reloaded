@@ -61,7 +61,8 @@ $color-map-utility: (
   $increment: 0;
   $half-pool-size: ($pool-size - 1) / 2;
 
-  @for $i from 1 through $pool-size {
+  @for $i from 0 through $pool-size-1 { 
+    // start from 0 for base color
     $suffix: '';
     $variant: $i - $increment;
 
@@ -72,12 +73,16 @@ $color-map-utility: (
     // If variant equals half of the pool size
     @else if $variant == $half-pool-size {
       $variant: 'mob'; // Set variant to mob for positive values at end of pool
-      $increment: $i - 1; // Update increment to current index minus 1
+      $increment: $i; // Update increment to current index
     }
-    // If increment is greater than 0, set suffix and variant for ob variants
+    // If increment is greater than 0 and not 0, set suffix and variant for ob variants
     @else if $increment > 0 {
       $suffix: "--ob#{($variant - 1) % 4 + 1}"; // Set suffix with ob and number between 1 and 4
       $variant: ($variant - 1) % 4 + 1; // Set variant to number between 1 and 4
+    }
+    // Add suffix "--b" for the base color (variant 0)
+    @else {
+      $suffix: '--b';
     }
 
     // Adjust color for each variant using the adjust-color function and suffix, if applicable

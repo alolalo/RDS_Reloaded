@@ -1,0 +1,14 @@
+/* Since most people can get pretty obsessed with resets, @layers will come to the rescue to load them with ease and without conflicts. */
+@use 'sass:meta';
+
+@layer normalize-css-reset, the-new-css-reset, your-css-reset;
+
+@layer normalize-css-reset {
+  @include meta.load-css('your-css-reset');
+}
+@layer the-new-css-reset {
+  @include meta.load-css('the-new-css-reset');
+}
+@layer your-css-reset {
+  @include meta.load-css('your-css-reset');
+}
