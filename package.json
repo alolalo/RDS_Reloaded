@@ -1,0 +1,26 @@
+{
+  "name": "rds_reloaded",
+  "version": "0.0.1",
+  "description": "RevolverDS: Just Lock, Load & Ship your DS!",
+  "main": "config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alolalo/RevolverDS_RELOADED.git"
+  },
+  "keywords": [
+    "dutch",
+    "design",
+    "system",
+    "revolver",
+    "boum"
+  ],
+  "author": "Guus \"Mr Bot\" Hoeve",
+  "license": "SEE LICENSE IN ROOT: boum_license.pdf",
+  "bugs": {
+    "url": "https://github.com/alolalo/RevolverDS_RELOADED/issues"
+  },
+  "homepage": "https://github.com/alolalo/RevolverDS_RELOADED#readme"
+}

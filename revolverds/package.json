@@ -1,0 +1,16 @@
+{
+  "name": "revolverds",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vanilla-extract/vite-plugin": "^3.8.0",
+    "sass": "^1.60.0",
+    "vite": "^4.2.0"
+  }
+}

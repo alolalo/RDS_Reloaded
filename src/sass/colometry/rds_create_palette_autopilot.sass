@@ -103,7 +103,7 @@ $color-map-utility: (
   }
 }
 
-// Generate text variants
+// Generate text variants for Color, System & Utility colors
 @each $color-pool in ('c', 's', 'u') {
   // Combine the color pools from the combined color maps
   $pool-size: if($color-pool == 'c', $pool-size-base, $pool-size-system);
